@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUXE — Premium Collection</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #e8d5a0;
+    --dark: #080808;
+    --dark-2: #111111;
+    --dark-3: #1a1a1a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: #e8e8e8; overflow-x: hidden; }
+
+  /* Typography */
+  .font-display { font-family: 'Cormorant Garamond', serif; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--dark); }
+  ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+  /* Cursor */
+  .cursor { width: 10px; height: 10px; background: var(--gold); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: transform 0.1s; }
+  .cursor-ring { width: 36px; height: 36px; border: 1px solid rgba(201,168,76,0.5); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: transform 0.12s, width 0.3s, height 0.3s; }
+  body:hover .cursor { transform: translate(-50%, -50%) scale(1); }
+
+  /* Nav */
+  nav { position: fixed; top: 0; width: 100%; z-index: 1000; padding: 24px 48px; display: flex; align-items: center; justify-content: space-between; transition: all 0.4s; }
+  nav.scrolled { background: rgba(8,8,8,0.95); backdrop-filter: blur(20px); padding: 16px 48px; border-bottom: 1px solid rgba(201,168,76,0.15); }
+  .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; letter-spacing: 0.3em; color: var(--gold); }
+  .nav-links a { color: rgba(232,232,232,0.7); text-decoration: none; font-size: 13px; letter-spacing: 0.15em; font-weight: 300; margin: 0 20px; transition: color 0.3s; text-transform: uppercase; }
+  .nav-links a:hover { color: var(--gold); }
+  .cart-btn { position: relative; background: none; border: 1px solid rgba(201,168,76,0.4); color: var(--gold); padding: 10px 20px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 13px; letter-spacing: 0.1em; transition: all 0.3s; }
+  .cart-btn:hover { background: var(--gold); color: var(--dark); }
+  .cart-count { position: absolute; top: -8px; right: -8px; background: var(--gold); color: var(--dark); width: 20px; height: 20px; border-radius: 50%; font-size: 11px; font-weight: 500; display: flex; align-items: center; justify-content: center; }
+
+  /* Hero */
+  .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+  .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 50%, rgba(201,168,76,0.08) 0%, transparent 60%), radial-gradient(ellipse at 80% 50%, rgba(201,168,76,0.05) 0%, transparent 60%); }
+  .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px); background-size: 60px 60px; }
+  .hero-content { text-align: center; z-index: 10; max-width: 900px; padding: 0 24px; }
+  .hero-eyebrow { font-size: 12px; letter-spacing: 0.4em; color: var(--gold); text-transform: uppercase; margin-bottom: 32px; animation: fadeUp 1s ease 0.2s both; }
+  .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(64px, 10vw, 120px); font-weight: 300; line-height: 0.95; color: #f0ece4; margin-bottom: 24px; animation: fadeUp 1s ease 0.4s both; }
+  .hero-title em { font-style: italic; color: var(--gold); }
+  .hero-subtitle { font-size: 16px; font-weight: 300; color: rgba(232,232,232,0.55); letter-spacing: 0.05em; line-height: 1.8; max-width: 480px; margin: 0 auto 48px; animation: fadeUp 1s ease 0.6s both; }
+  .hero-btns { display: flex; gap: 16px; justify-content: center; animation: fadeUp 1s ease 0.8s both; }
+  .btn-primary { padding: 16px 40px; background: var(--gold); color: var(--dark); font-size: 13px; letter-spacing: 0.15em; text-transform: uppercase; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 500; transition: all 0.3s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+  .btn-outline { padding: 16px 40px; background: transparent; color: var(--gold); font-size: 13px; letter-spacing: 0.15em; text-transform: uppercase; border: 1px solid rgba(201,168,76,0.4); cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 300; transition: all 0.3s; text-decoration: none; }
+  .btn-outline:hover { border-color: var(--gold); background: rgba(201,168,76,0.08); transform: translateY(-2px); }
+
+  /* Scroll indicator */
+  .scroll-indicator { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; animation: fadeIn 1.5s ease 1.5s both; }
+  .scroll-line { width: 1px; height: 60px; background: linear-gradient(to bottom, transparent, var(--gold), transparent); animation: scrollPulse 2s ease-in-out infinite; }
+  .scroll-text { font-size: 10px; letter-spacing: 0.3em; color: rgba(201,168,76,0.5); text-transform: uppercase; }
+
+  /* Section */
+  section { padding: 120px 48px; }
+  .section-label { font-size: 11px; letter-spacing: 0.4em; color: var(--gold); text-transform: uppercase; margin-bottom: 16px; }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(40px, 5vw, 64px); font-weight: 300; color: #f0ece4; line-height: 1.1; }
+  .section-title em { font-style: italic; color: var(--gold); }
+  .divider { width: 60px; height: 1px; background: var(--gold); margin: 24px 0; }
+
+  /* Products */
+  .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2px; margin-top: 60px; }
+  .product-card { background: var(--dark-2); position: relative; overflow: hidden; cursor: pointer; group; }
+  .product-img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: flex; align-items: center; justify-content: center; font-size: 80px; transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94); background: var(--dark-3); }
+  .product-card:hover .product-img { transform: scale(1.06); }
+  .product-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(8,8,8,0.95) 0%, rgba(8,8,8,0.4) 50%, transparent 100%); display: flex; flex-direction: column; justify-content: flex-end; padding: 28px; }
+  .product-tag { position: absolute; top: 20px; left: 20px; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; background: var(--gold); color: var(--dark); padding: 4px 12px; font-weight: 500; }
+  .product-name { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 400; color: #f0ece4; margin-bottom: 4px; }
+  .product-desc { font-size: 13px; color: rgba(232,232,232,0.5); margin-bottom: 16px; font-weight: 300; }
+  .product-footer { display: flex; align-items: center; justify-content: space-between; }
+  .product-price { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--gold); font-weight: 300; }
+  .add-to-cart { background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.4); color: var(--gold); padding: 8px 20px; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.3s; }
+  .add-to-cart:hover { background: var(--gold); color: var(--dark); transform: scale(1.02); }
+  .add-to-cart.added { background: var(--gold); color: var(--dark); }
+
+  /* Features */
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1px; background: rgba(201,168,76,0.1); margin-top: 60px; }
+  .feature-item { background: var(--dark); padding: 48px 32px; text-align: center; transition: background 0.3s; }
+  .feature-item:hover { background: var(--dark-3); }
+  .feature-icon { font-size: 36px; margin-bottom: 20px; display: block; }
+  .feature-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; color: #f0ece4; margin-bottom: 12px; }
+  .feature-desc { font-size: 14px; color: rgba(232,232,232,0.45); font-weight: 300; line-height: 1.7; }
+
+  /* Stats */
+  .stats-section { background: var(--dark-2); border-top: 1px solid rgba(201,168,76,0.1); border-bottom: 1px solid rgba(201,168,76,0.1); }
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(201,168,76,0.1); }
+  .stat-item { background: var(--dark-2); padding: 60px 24px; text-align: center; }
+  .stat-number { font-family: 'Cormorant Garamond', serif; font-size: 56px; font-weight: 300; color: var(--gold); line-height: 1; margin-bottom: 8px; }
+  .stat-label { font-size: 12px; letter-spacing: 0.2em; color: rgba(232,232,232,0.4); text-transform: uppercase; }
+
+  /* Testimonials */
+  .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-top: 60px; }
+  .testimonial-card { background: var(--dark-2); border: 1px solid rgba(201,168,76,0.1); padding: 36px; position: relative; }
+  .testimonial-card::before { content: '"'; font-family: 'Cormorant Garamond', serif; font-size: 120px; color: rgba(201,168,76,0.08); position: absolute; top: -20px; left: 20px; line-height: 1; }
+  .testimonial-text { font-size: 15px; line-height: 1.8; color: rgba(232,232,232,0.7); font-weight: 300; margin-bottom: 24px; position: relative; }
+  .testimonial-author { display: flex; align-items: center; gap: 12px; }
+  .author-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 500; color: var(--dark); font-family: 'Cormorant Garamond', serif; flex-shrink: 0; }
+  .author-name { font-size: 15px; font-weight: 500; color: #f0ece4; }
+  .author-role { font-size: 12px; color: rgba(232,232,232,0.4); letter-spacing: 0.05em; }
+  .stars { color: var(--gold); font-size: 14px; margin-bottom: 16px; }
+
+  /* Newsletter */
+  .newsletter-section { background: var(--dark-3); border-top: 1px solid rgba(201,168,76,0.1); text-align: center; }
+  .newsletter-form { display: flex; gap: 0; max-width: 480px; margin: 36px auto 0; }
+  .newsletter-input { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(201,168,76,0.3); border-right: none; padding: 16px 20px; color: #e8e8e8; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; transition: border-color 0.3s; }
+  .newsletter-input:focus { border-color: var(--gold); }
+  .newsletter-input::placeholder { color: rgba(232,232,232,0.3); }
+  .newsletter-btn { background: var(--gold); color: var(--dark); border: none; padding: 16px 28px; font-family: 'DM Sans', sans-serif; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; font-weight: 500; transition: all 0.3s; white-space: nowrap; }
+  .newsletter-btn:hover { background: var(--gold-light); }
+
+  /* Footer */
+  footer { background: #050505; border-top: 1px solid rgba(201,168,76,0.1); padding: 60px 48px 32px; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+  .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 300; color: var(--gold); letter-spacing: 0.3em; margin-bottom: 16px; }
+  .footer-desc { font-size: 14px; color: rgba(232,232,232,0.35); font-weight: 300; line-height: 1.8; max-width: 260px; }
+  .footer-heading { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; }
+  .footer-links { list-style: none; }
+  .footer-links li { margin-bottom: 10px; }
+  .footer-links a { font-size: 14px; color: rgba(232,232,232,0.4); text-decoration: none; font-weight: 300; transition: color 0.3s; }
+  .footer-links a:hover { color: var(--gold); }
+  .footer-bottom { border-top: 1px solid rgba(201,168,76,0.08); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; }
+  .footer-copy { font-size: 13px; color: rgba(232,232,232,0.25); }
+
+  /* Cart Sidebar */
+  .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+  .cart-overlay.open { opacity: 1; pointer-events: all; }
+  .cart-sidebar { position: fixed; top: 0; right: -480px; width: 480px; max-width: 95vw; height: 100vh; background: var(--dark-2); border-left: 1px solid rgba(201,168,76,0.15); z-index: 2001; transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); display: flex; flex-direction: column; }
+  .cart-sidebar.open { right: 0; }
+  .cart-header { padding: 28px 32px; border-bottom: 1px solid rgba(201,168,76,0.1); display: flex; justify-content: space-between; align-items: center; }
+  .cart-title { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 400; color: #f0ece4; }
+  .close-cart { background: none; border: 1px solid rgba(201,168,76,0.3); color: var(--gold); width: 36px; height: 36px; cursor: pointer; font-size: 18px; transition: all 0.3s; }
+  .close-cart:hover { background: var(--gold); color: var(--dark); }
+  .cart-items { flex: 1; overflow-y: auto; padding: 24px 32px; }
+  .cart-item { display: flex; gap: 16px; padding: 20px 0; border-bottom: 1px solid rgba(201,168,76,0.08); animation: slideIn 0.3s ease; }
+  .cart-item-emoji { width: 72px; height: 72px; background: var(--dark-3); display: flex; align-items: center; justify-content: center; font-size: 32px; flex-shrink: 0; }
+  .cart-item-info { flex: 1; }
+  .cart-item-name { font-size: 15px; font-weight: 400; color: #f0ece4; margin-bottom: 4px; }
+  .cart-item-price { font-size: 14px; color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 18px; }
+  .cart-qty { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+  .qty-btn { background: none; border: 1px solid rgba(201,168,76,0.3); color: var(--gold); width: 28px; height: 28px; cursor: pointer; font-size: 16px; transition: all 0.2s; }
+  .qty-btn:hover { background: var(--gold); color: var(--dark); }
+  .qty-num { font-size: 15px; color: #e8e8e8; min-width: 24px; text-align: center; }
+  .remove-item { background: none; border: none; color: rgba(232,232,232,0.3); cursor: pointer; font-size: 20px; padding: 4px; transition: color 0.3s; margin-left: auto; align-self: flex-start; }
+  .remove-item:hover { color: #ff4444; }
+  .cart-footer { padding: 24px 32px; border-top: 1px solid rgba(201,168,76,0.1); }
+  .cart-total-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+  .cart-total-label { font-size: 13px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(232,232,232,0.5); }
+  .cart-total-amount { font-family: 'Cormorant Garamond', serif; font-size: 32px; color: var(--gold); font-weight: 300; }
+  .checkout-btn { width: 100%; background: var(--gold); color: var(--dark); border: none; padding: 18px; font-family: 'DM Sans', sans-serif; font-size: 14px; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; font-weight: 500; transition: all 0.3s; }
+  .checkout-btn:hover { background: var(--gold-light); }
+  .cart-empty { text-align: center; padding: 80px 32px; }
+  .cart-empty-icon { font-size: 64px; margin-bottom: 16px; opacity: 0.4; }
+  .cart-empty-text { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: rgba(232,232,232,0.4); }
+
+  /* Toast */
+  .toast-container { position: fixed; bottom: 32px; right: 32px; z-index: 3000; display: flex; flex-direction: column; gap: 12px; }
+  .toast { background: var(--dark-3); border: 1px solid rgba(201,168,76,0.3); border-left: 3px solid var(--gold); padding: 16px 24px; display: flex; align-items: center; gap: 12px; min-width: 280px; animation: toastIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+  .toast.removing { animation: toastOut 0.3s ease forwards; }
+  .toast-icon { font-size: 20px; }
+  .toast-text { font-size: 14px; color: #e8e8e8; font-weight: 300; }
+  .toast-bold { font-weight: 500; color: var(--gold-light); }
+
+  /* Scroll animations */
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+  .reveal-left { opacity: 0; transform: translateX(-40px); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+  .reveal-left.visible { opacity: 1; transform: translateX(0); }
+  .reveal-scale { opacity: 0; transform: scale(0.92); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+  .reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+  /* Keyframes */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes scrollPulse { 0%, 100% { opacity: 0.3; transform: scaleY(1); } 50% { opacity: 1; transform: scaleY(1.1); } }
+  @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes toastIn { from { opacity: 0; transform: translateX(60px) scale(0.9); } to { opacity: 1; transform: translateX(0) scale(1); } }
+  @keyframes toastOut { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(60px); } }
+  @keyframes counterUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+
+  .gold-shimmer { background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%); background-size: 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shimmer 3s infinite; }
+
+  /* Floating badge */
+  .floating-badge { position: absolute; bottom: -12px; right: 20px; background: var(--gold); color: var(--dark); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 14px; font-weight: 500; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    nav.scrolled { padding: 14px 24px; }
+    .nav-links { display: none; }
+    section { padding: 80px 24px; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .newsletter-form { flex-direction: column; }
+    .newsletter-input { border-right: 1px solid rgba(201,168,76,0.3); }
+    .cart-sidebar { width: 100vw; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Navigation -->
+<nav id="navbar">
+  <div class="nav-logo">LUXE</div>
+  <div class="nav-links">
+    <a href="#products">Collection</a>
+    <a href="#features">Why Us</a>
+    <a href="#testimonials">Reviews</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <button class="cart-btn" onclick="toggleCart()">
+    Bag <span class="cart-count" id="cartCount" style="display:none">0</span>
+  </button>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">New Collection — 2025</p>
+    <h1 class="hero-title">Where <em>Luxury</em><br>Meets Desire</h1>
+    <p class="hero-subtitle">Crafted for those who demand excellence. Each piece tells a story of unparalleled artistry and timeless sophistication.</p>
+    <div class="hero-btns">
+      <a href="#products" class="btn-primary">Shop Collection ↓</a>
+      <a href="#features" class="btn-outline">Our Story</a>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span class="scroll-text">Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- Products -->
+<section id="products" style="padding: 120px 0;">
+  <div style="padding: 0 48px; margin-bottom: 60px;">
+    <p class="section-label reveal">The Collection</p>
+    <h2 class="section-title reveal reveal-delay-1">Curated <em>Masterpieces</em></h2>
+    <div class="divider reveal reveal-delay-2"></div>
+    <p style="font-size: 16px; font-weight: 300; color: rgba(232,232,232,0.5); max-width: 500px; line-height: 1.8;" class="reveal reveal-delay-3">Each item is sourced from the world's finest craftspeople, delivering an experience that transcends the ordinary.</p>
+  </div>
+  <div class="products-grid" id="productsGrid"></div>
+</section>
+
+<!-- Stats -->
+<section class="stats-section" style="padding: 0;">
+  <div class="stats-grid">
+    <div class="stat-item reveal">
+      <div class="stat-number" data-target="12">0</div>
+      <div class="stat-label">Years of Excellence</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-1">
+      <div class="stat-number" data-target="48">0</div>
+      <div class="stat-label">Global Partners</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-2">
+      <div class="stat-number" data-target="99">0</div>
+      <div class="stat-label">Client Satisfaction %</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-3">
+      <div class="stat-number" data-target="5400">0</div>
+      <div class="stat-label">Happy Clients</div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section id="features">
+  <div style="text-align: center; max-width: 600px; margin: 0 auto 0;">
+    <p class="section-label reveal">Why LUXE</p>
+    <h2 class="section-title reveal reveal-delay-1" style="text-align: center;">The <em>Promise</em><br>of Excellence</h2>
+    <div class="divider reveal reveal-delay-2" style="margin: 24px auto;"></div>
+  </div>
+  <div class="features-grid">
+    <div class="feature-item reveal reveal-scale">
+      <span class="feature-icon">✦</span>
+      <div class="feature-title">Artisan Crafted</div>
+      <p class="feature-desc">Every piece handcrafted by master artisans with decades of expertise and passion.</p>
+    </div>
+    <div class="feature-item reveal reveal-scale reveal-delay-1">
+      <span class="feature-icon">◈</span>
+      <div class="feature-title">Premium Materials</div>
+      <p class="feature-desc">We source only the finest materials from trusted suppliers across 24 countries.</p>
+    </div>
+    <div class="feature-item reveal reveal-scale reveal-delay-2">
+      <span class="feature-icon">⟳</span>
+      <div class="feature-title">Free Returns</div>
+      <p class="feature-desc">30-day hassle-free returns with full refund. Your satisfaction is our guarantee.</p>
+    </div>
+    <div class="feature-item reveal reveal-scale reveal-delay-3">
+      <span class="feature-icon">⬡</span>
+      <div class="feature-title">Lifetime Warranty</div>
+      <p class="feature-desc">Every item comes with a lifetime craftsmanship warranty. Built to last forever.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section id="testimonials" style="background: var(--dark-2);">
+  <p class="section-label reveal">Testimonials</p>
+  <h2 class="section-title reveal reveal-delay-1">Words from<br>Our <em>Clients</em></h2>
+  <div class="divider reveal reveal-delay-2"></div>
+  <div class="testimonial-grid">
+    <div class="testimonial-card reveal">
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">An experience unlike any other. The quality exceeded every expectation I had. I've never owned something that feels this extraordinary.</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">SL</div>
+        <div>
+          <div class="author-name">Sophia Laurent</div>
+          <div class="author-role">Fashion Director, Paris</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card reveal reveal-delay-1">
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">LUXE has redefined what luxury means to me. The attention to detail is extraordinary — every stitch, every material tells a story.</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">JM</div>
+        <div>
+          <div class="author-name">James Mercer</div>
+          <div class="author-role">Entrepreneur, London</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card reveal reveal-delay-2">
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">I've shopped luxury brands worldwide, and LUXE stands above them all. The packaging alone is worth the price. Truly world-class.</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">AK</div>
+        <div>
+          <div class="author-name">Aisha Khan</div>
+          <div class="author-role">Interior Designer, Dubai</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Newsletter -->
+<section class="newsletter-section" id="contact">
+  <p class="section-label reveal" style="text-align: center;">Join the Circle</p>
+  <h2 class="section-title reveal reveal-delay-1" style="text-align: center;">Get <em>Exclusive</em> Access</h2>
+  <p class="reveal reveal-delay-2" style="font-size: 15px; font-weight: 300; color: rgba(232,232,232,0.45); margin-top: 16px; line-height: 1.8;">Be the first to know about new arrivals, private sales, and curated stories.</p>
+  <div class="newsletter-form reveal reveal-delay-3">
+    <input type="email" class="newsletter-input" placeholder="Your email address" id="emailInput">
+    <button class="newsletter-btn" onclick="subscribeNewsletter()">Subscribe</button>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">LUXE</div>
+      <p class="footer-desc">Redefining luxury for the modern connoisseur. Every piece is a statement of who you are.</p>
+    </div>
+    <div>
+      <div class="footer-heading">Collection</div>
+      <ul class="footer-links">
+        <li><a href="#">New Arrivals</a></li>
+        <li><a href="#">Bestsellers</a></li>
+        <li><a href="#">Limited Edition</a></li>
+        <li><a href="#">Archive</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">Services</div>
+      <ul class="footer-links">
+        <li><a href="#">Personal Shopping</a></li>
+        <li><a href="#">Gift Wrapping</a></li>
+        <li><a href="#">Custom Orders</a></li>
+        <li><a href="#">Alterations</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">Legal</div>
+      <ul class="footer-links">
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+        <li><a href="#">Shipping Policy</a></li>
+        <li><a href="#">Returns</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 LUXE. All rights reserved.</span>
+    <span class="footer-copy">Crafted with passion ✦</span>
+  </div>
+</footer>
+
+<!-- Cart Overlay -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+
+<!-- Cart Sidebar -->
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <div>
+      <div class="cart-title">Your Bag</div>
+      <div style="font-size: 13px; color: rgba(232,232,232,0.4); margin-top: 2px;" id="cartItemCountLabel">0 items</div>
+    </div>
+    <button class="close-cart" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItemsContainer">
+    <div class="cart-empty" id="cartEmpty">
+      <div class="cart-empty-icon">◫</div>
+      <div class="cart-empty-text">Your bag is empty</div>
+      <p style="font-size: 13px; color: rgba(232,232,232,0.3); margin-top: 8px;">Add some luxury to your life</p>
+    </div>
+  </div>
+  <div class="cart-footer" id="cartFooter" style="display:none;">
+    <div class="cart-total-row">
+      <div class="cart-total-label">Total</div>
+      <div class="cart-total-amount" id="cartTotal">$0</div>
+    </div>
+    <button class="checkout-btn" onclick="checkout()">Proceed to Checkout →</button>
+    <p style="text-align: center; font-size: 12px; color: rgba(232,232,232,0.3); margin-top: 12px; letter-spacing: 0.05em;">Free worldwide shipping on all orders</p>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// ─── Products Data ───────────────────────────────────────────────
+const products = [
+  { id: 1, name: 'Obsidian Timepiece', desc: 'Swiss movement · Limited edition', price: 4850, emoji: '⌚', tag: 'New' },
+  { id: 2, name: 'Noir Leather Bag', desc: 'Full-grain Italian leather', price: 2340, emoji: '👜', tag: 'Bestseller' },
+  { id: 3, name: 'Celestial Pendant', desc: '18K gold · Natural diamonds', price: 3200, emoji: '💎', tag: 'Exclusive' },
+  { id: 4, name: 'Merino Wool Coat', desc: 'Hand-tailored · Cashmere blend', price: 1890, emoji: '🧥', tag: 'New' },
+  { id: 5, name: 'Crystal Perfume', desc: 'Rare oud · Amber · Sandalwood', price: 680, emoji: '🫙', tag: 'Limited' },
+  { id: 6, name: 'Silk Evening Dress', desc: 'Pure mulberry silk · Bespoke', price: 2750, emoji: '👗', tag: 'Exclusive' },
+];
+
+// ─── Cart State ───────────────────────────────────────────────────
+let cart = [];
+
+// ─── Render Products ─────────────────────────────────────────────
+function renderProducts() {
+  const grid = document.getElementById('productsGrid');
+  grid.innerHTML = products.map((p, i) => `
+    <div class="product-card reveal reveal-delay-${(i % 4) + 1}" onclick="">
+      <div class="product-img">${p.emoji}</div>
+      <div class="product-overlay">
+        <span class="product-tag">${p.tag}</span>
+        <div class="product-name">${p.name}</div>
+        <div class="product-desc">${p.desc}</div>
+        <div class="product-footer">
+          <div class="product-price">$${p.price.toLocaleString()}</div>
+          <button class="add-to-cart" id="btn-${p.id}" onclick="addToCart(${p.id}, event)">Add to Bag</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  observeElements();
+}
+
+// ─── Add to Cart ─────────────────────────────────────────────────
+function addToCart(id, e) {
+  e && e.stopPropagation();
+  const product = products.find(p => p.id === id);
+  const existing = cart.find(i => i.id === id);
+  if (existing) { existing.qty++; }
+  else { cart.push({ ...product, qty: 1 }); }
+  updateCart();
+  showToast(`${product.emoji} <span class="toast-bold">${product.name}</span> added to your bag`);
+  const btn = document.getElementById(`btn-${id}`);
+  btn.textContent = '✓ Added';
+  btn.classList.add('added');
+  setTimeout(() => { btn.textContent = 'Add to Bag'; btn.classList.remove('added'); }, 2000);
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(i => i.id !== id);
+  updateCart();
+}
+
+function changeQty(id, delta) {
+  const item = cart.find(i => i.id === id);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) removeFromCart(id);
+  else updateCart();
+}
+
+function updateCart() {
+  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const count = cart.reduce((s, i) => s + i.qty, 0);
+  const countEl = document.getElementById('cartCount');
+  const label = document.getElementById('cartItemCountLabel');
+  const footer = document.getElementById('cartFooter');
+  const empty = document.getElementById('cartEmpty');
+  const container = document.getElementById('cartItemsContainer');
+  const totalEl = document.getElementById('cartTotal');
+
+  countEl.textContent = count;
+  countEl.style.display = count > 0 ? 'flex' : 'none';
+  label.textContent = `${count} item${count !== 1 ? 's' : ''}`;
+  totalEl.textContent = `$${total.toLocaleString()}`;
+
+  if (cart.length === 0) {
+    empty.style.display = 'block';
+    footer.style.display = 'none';
+    container.innerHTML = '';
+    container.appendChild(empty);
+  } else {
+    footer.style.display = 'block';
+    const html = cart.map(item => `
+      <div class="cart-item" id="ci-${item.id}">
+        <div class="cart-item-emoji">${item.emoji}</div>
+        <div class="cart-item-info">
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-price">$${item.price.toLocaleString()}</div>
+          <div class="cart-qty">
+            <button class="qty-btn" onclick="changeQty(${item.id}, -1)">−</button>
+            <span class="qty-num">${item.qty}</span>
+            <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+          </div>
+        </div>
+        <button class="remove-item" onclick="removeFromCart(${item.id})" title="Remove">✕</button>
+      </div>
+    `).join('');
+    container.innerHTML = html;
+  }
+}
+
+// ─── Cart Toggle ─────────────────────────────────────────────────
+function toggleCart() {
+  const sidebar = document.getElementById('cartSidebar');
+  const overlay = document.getElementById('cartOverlay');
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('open');
+}
+
+// ─── Checkout ────────────────────────────────────────────────────
+function checkout() {
+  if (cart.length === 0) return;
+  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  cart = [];
+  updateCart();
+  toggleCart();
+  setTimeout(() => showToast(`✦ <span class="toast-bold">Order placed!</span> Total: $${total.toLocaleString()}. Thank you!`), 400);
+}
+
+// ─── Newsletter ──────────────────────────────────────────────────
+function subscribeNewsletter() {
+  const input = document.getElementById('emailInput');
+  if (!input.value || !input.value.includes('@')) {
+    showToast('⚠ Please enter a valid email address');
+    return;
+  }
+  showToast(`✦ <span class="toast-bold">Welcome to LUXE!</span> You're now in the circle.`);
+  input.value = '';
+}
+
+// ─── Toast ───────────────────────────────────────────────────────
+function showToast(message) {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.innerHTML = `<div class="toast-text">${message}</div>`;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.classList.add('removing');
+    setTimeout(() => toast.remove(), 300);
+  }, 3500);
+}
+
+// ─── Navbar Scroll ───────────────────────────────────────────────
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('navbar');
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// ─── Scroll Animations ───────────────────────────────────────────
+function observeElements() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        // Trigger counter for stats
+        if (entry.target.querySelector && entry.target.querySelector('[data-target]')) {
+          entry.target.querySelectorAll('[data-target]').forEach(animateCounter);
+        }
+        if (entry.target.hasAttribute('data-target')) animateCounter(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-scale').forEach(el => {
+    observer.observe(el);
+  });
+}
+
+// ─── Counter Animation ───────────────────────────────────────────
+function animateCounter(el) {
+  const target = parseInt(el.getAttribute('data-target'));
+  const duration = 1800;
+  const start = performance.now();
+  const tick = (now) => {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.floor(eased * target).toLocaleString();
+    if (progress < 1) requestAnimationFrame(tick);
+    else el.textContent = target.toLocaleString() + (target === 99 ? '%' : target > 100 ? '+' : '+');
+  };
+  requestAnimationFrame(tick);
+}
+
+// Also observe stat items separately
+function observeStats() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const num = entry.target.querySelector('[data-target]');
+        if (num && !num.animated) { num.animated = true; animateCounter(num); }
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.stat-item').forEach(el => observer.observe(el));
+}
+
+// ─── Custom Cursor ───────────────────────────────────────────────
+const cursor = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx + 'px'; cursor.style.top = my + 'px'; });
+(function animate() {
+  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+  cursorRing.style.left = rx + 'px'; cursorRing.style.top = ry + 'px';
+  requestAnimationFrame(animate);
+})();
+document.querySelectorAll('a, button, .product-card').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursorRing.style.width = '60px'; cursorRing.style.height = '60px'; cursorRing.style.borderColor = 'rgba(201,168,76,0.8)'; cursor.style.opacity = '0'; });
+  el.addEventListener('mouseleave', () => { cursorRing.style.width = '36px'; cursorRing.style.height = '36px'; cursorRing.style.borderColor = 'rgba(201,168,76,0.5)'; cursor.style.opacity = '1'; });
+});
+
+// ─── Init ─────────────────────────────────────────────────────────
+renderProducts();
+observeStats();
+</script>
+</body>
+</html>
